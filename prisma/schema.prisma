@@ -15,8 +15,47 @@ datasource db {
 
 model User {
   id       String @id @default(uuid())
+  name     String
   email    String @unique
   password String
   token    String?
   createdAt DateTime @default(now())
+  
+  // Relation avec Intervention
+  interventions Intervention[]
+}
+
+model Intervention {
+  id          String   @id @default(uuid())
+  titre       String
+  dateStart   String
+  dateEnd     String
+  status      Int
+  priority    String
+  customer    String
+  long        Float
+  lat         Float
+  distance    Float
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Clé étrangère vers User
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Relation avec Materiel
+  materiels   Materiel[]
+}
+
+model Materiel {
+  id             String       @id @default(uuid())
+  name           String
+  quantity       Int
+  idIntervention String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  
+  // Relation avec Intervention
+  intervention   Intervention @relation(fields: [idIntervention], references: [id], onDelete: Cascade)
 }
