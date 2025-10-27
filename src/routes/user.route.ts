@@ -6,8 +6,69 @@ import { authenticateToken, optionalAuth } from "../middleware/auth";
 
 const router = Router();
 
-// Routes publiques
+/**
+ * @swagger
+ * /api/users:
+ *   post:
+ *     summary: Créer un nouvel utilisateur
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - email
+ *               - password
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               password:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Utilisateur créé avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Success'
+ */
 router.post("/users", validate(CreateUserSchema), userController.createUser);
+
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     summary: Authentifier un utilisateur
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Connexion réussie
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Success'
+ */
 router.post("/auth/login", validate(LoginSchema), userController.authenticateUser);
 
 // Routes protégées par authentification

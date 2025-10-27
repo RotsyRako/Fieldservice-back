@@ -11,7 +11,6 @@ export const CreateInterventionSchema = z.object({
   lat: z.number().min(-90).max(90, "La latitude doit être entre -90 et 90"),
   distance: z.number().min(0, "La distance doit être positive"),
   description: z.string().min(1, "La description est requise"),
-  userId: z.string().uuid("L'ID utilisateur doit être un UUID valide"),
 });
 
 export const UpdateInterventionSchema = z.object({

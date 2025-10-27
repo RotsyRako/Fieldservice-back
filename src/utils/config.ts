@@ -47,7 +47,7 @@ export function validateConfig(): void {
   if (missingVars.length > 0) {
     const missingKeys = missingVars.map(({ key }) => key).join(", ");
     throw new Error(
-      `❌ Variables d'environnement manquantes: ${missingKeys}\n` +
+      `Variables d'environnement manquantes: ${missingKeys}\n` +
       "Veuillez configurer ces variables dans votre fichier .env"
     );
   }
@@ -57,10 +57,10 @@ export function validateConfig(): void {
  * Affiche la configuration actuelle (sans les secrets)
  */
 export function displayConfig(): void {
-  console.log("🔧 Configuration du serveur:");
-  console.log(`   Port: ${config.server.port}`);
-  console.log(`   Environnement: ${config.server.nodeEnv}`);
-  console.log(`   Base de données: ${config.database.url ? "✅ Configurée" : "❌ Non configurée"}`);
-  console.log(`   JWT Secret: ${config.jwt.secret ? "✅ Configuré" : "❌ Non configuré"}`);
-  console.log(`   Durée JWT: ${config.jwt.expiresIn} secondes`);
+  console.log("Configuration du serveur:");
+  console.log(`Port: ${config.server.port}`);
+  console.log(`Environnement: ${config.server.nodeEnv}`);
+  console.log(`Base de données: ${config.database.url ? "Configurée" : "Non configurée"}`);
+  console.log(`JWT Secret: ${config.jwt.secret ? "Configuré" : "Non configuré"}`);
+  console.log(`Durée JWT: ${config.jwt.expiresIn} secondes`);
 }

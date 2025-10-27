@@ -21,7 +21,28 @@ export class InterventionController extends BaseController<Intervention, CreateI
   createIntervention = async (req: Request, res: Response) => {
     try {
       const interventionData = req.body as CreateInterventionDTO;
-      const result = await this.interventionService.createIntervention(interventionData);
+      
+      console.log("🔍 Données reçues:", interventionData);
+      console.log("🔍 Utilisateur dans la requête:", (req as any).user);
+      
+      // Extraire l'ID utilisateur depuis le token JWT
+      const userId = (req as any).user?.id;
+      if (!userId) {
+        console.log("❌ Aucun ID utilisateur trouvé dans le token");
+        return res.status(401).json(fail("ID utilisateur non trouvé dans le token"));
+      }
+      
+      console.log("✅ ID utilisateur trouvé:", userId);
+      
+      // Ajouter l'ID utilisateur aux données
+      const interventionDataWithUser = {
+        ...interventionData,
+        userId: userId
+      };
+      
+      console.log("🔍 Données avec utilisateur:", interventionDataWithUser);
+      
+      const result = await this.interventionService.createIntervention(interventionDataWithUser);
 
       if (!result.success) {
         const statusCode = this.getStatusCodeFromError(result.error);

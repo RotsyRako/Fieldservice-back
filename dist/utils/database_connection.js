@@ -11,29 +11,29 @@ const config_1 = require("./config");
  */
 async function testDatabaseConnection() {
     try {
-        console.log("🔍 Test de connexion à Supabase...");
+        console.log("Test de connexion à Supabase...");
         // Test de connexion
         await prisma_1.prisma.$connect();
-        console.log("✅ Connexion à Supabase établie");
+        console.log("Connexion à Supabase établie");
         // Test de requête simple
         await prisma_1.prisma.$queryRaw `SELECT 1`;
-        console.log("✅ Base de données accessible");
+        console.log("Base de données accessible");
         return true;
     }
     catch (error) {
-        console.error("❌ Erreur de connexion à Supabase:", error.message);
+        console.error("Erreur de connexion à Supabase:", error.message);
         // Gestion des erreurs spécifiques
         if (error.code === "P1001") {
-            console.error("💡 Erreur: Impossible de se connecter au serveur de base de données");
+            console.error("Erreur: Impossible de se connecter au serveur de base de données");
         }
         else if (error.code === "P1003") {
-            console.error("💡 Erreur: Base de données introuvable");
+            console.error("Erreur: Base de données introuvable");
         }
         else if (error.message?.includes("connect")) {
-            console.error("💡 Erreur: Problème de connexion réseau");
+            console.error("Erreur: Problème de connexion réseau");
         }
-        console.error("💡 Vérifiez votre configuration DATABASE_URL dans le fichier .env");
-        console.error(`💡 URL actuelle: ${config_1.config.database.url ? "Configurée" : "Non configurée"}`);
+        console.error("Vérifiez votre configuration DATABASE_URL dans le fichier .env");
+        console.error(`URL actuelle: ${config_1.config.database.url ? "Configurée" : "Non configurée"}`);
         return false;
     }
 }
@@ -43,10 +43,10 @@ async function testDatabaseConnection() {
 async function closeDatabaseConnection() {
     try {
         await prisma_1.prisma.$disconnect();
-        console.log("✅ Connexion à la base de données fermée");
+        console.log("Connexion à la base de données fermée");
     }
     catch (error) {
-        console.error("❌ Erreur lors de la fermeture de la connexion:", error);
+        console.error("Erreur lors de la fermeture de la connexion:", error);
     }
 }
 /**

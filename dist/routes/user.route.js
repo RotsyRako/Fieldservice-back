@@ -6,8 +6,68 @@ const user_dto_1 = require("../model/dto/user.dto");
 const user_controller_1 = require("../controller/user.controller");
 const auth_1 = require("../middleware/auth");
 const router = (0, express_1.Router)();
-// Routes publiques
+/**
+ * @swagger
+ * /api/users:
+ *   post:
+ *     summary: Créer un nouvel utilisateur
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - email
+ *               - password
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               password:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Utilisateur créé avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Success'
+ */
 router.post("/users", (0, validate_1.validate)(user_dto_1.CreateUserSchema), user_controller_1.userController.createUser);
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     summary: Authentifier un utilisateur
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Connexion réussie
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Success'
+ */
 router.post("/auth/login", (0, validate_1.validate)(user_dto_1.LoginSchema), user_controller_1.userController.authenticateUser);
 // Routes protégées par authentification
 router.get("/users", auth_1.optionalAuth, user_controller_1.userController.getAll);

@@ -1,4 +1,6 @@
 import express from "express";
+import swaggerUi from "swagger-ui-express";
+import { swaggerSpec } from "./swagger";
 import { errorHandler } from "./middleware/error_handler";
 import { testDatabaseConnection, closeDatabaseConnection } from "./utils/database_connection";
 import { configureRoutes } from "./app_router";
@@ -9,6 +11,17 @@ const app = express();
 // Middleware global
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Configuration Swagger
+app.get("/api-docs.json", (req, res) => {
+  res.setHeader("Content-Type", "application/json");
+  res.send(swaggerSpec);
+});
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+  customCss: '.swagger-ui .topbar { display: none }',
+  customSiteTitle: "Rotsy API Documentation",
+}));
 
 // Configuration des routes
 configureRoutes(app);
@@ -36,6 +49,7 @@ async function startServer() {
     app.listen(config.server.port, () => {
       console.log(`🚀 Server running on http://localhost:${config.server.port}`);
       console.log(`📊 Health check: http://localhost:${config.server.port}/health`);
+      console.log(`📚 API Documentation: http://localhost:${config.server.port}/api-docs`);
     });
   } catch (error) {
     console.error("❌ Erreur de configuration:", error);

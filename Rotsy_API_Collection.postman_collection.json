@@ -1,0 +1,1599 @@
+{
+	"info": {
+		"_postman_id": "rotsy-api-collection",
+		"name": "Rotsy API Collection",
+		"description": "Collection complète des API Rotsy Backend avec tous les endpoints disponibles",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "rotsy-backend"
+	},
+	"item": [
+		{
+			"name": "Health Check",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/health",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"health"
+							]
+						},
+						"description": "Vérifie l'état du serveur"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/users",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						},
+						"description": "Créer un nouvel utilisateur"
+					},
+					"response": []
+				},
+				{
+					"name": "Login User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						},
+						"description": "Authentifier un utilisateur et obtenir un token JWT"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/users",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						},
+						"description": "Récupérer tous les utilisateurs"
+					},
+					"response": []
+				},
+				{
+					"name": "Get User by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/users/{{user_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"{{user_id}}"
+							]
+						},
+						"description": "Récupérer un utilisateur par son ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Get User by Email",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/users/email/{{user_email}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"email",
+								"{{user_email}}"
+							]
+						},
+						"description": "Récupérer un utilisateur par son email"
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"John Updated\",\n  \"email\": \"john.updated@example.com\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/users/{{user_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"{{user_id}}"
+							]
+						},
+						"description": "Mettre à jour un utilisateur"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/users/{{user_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"{{user_id}}"
+							]
+						},
+						"description": "Supprimer un utilisateur"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Users Count",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/users/count",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"count"
+							]
+						},
+						"description": "Compter le nombre d'utilisateurs"
+					},
+					"response": []
+				},
+				{
+					"name": "Search Users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/users/search?field=name&value=John",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"search"
+							],
+							"query": [
+								{
+									"key": "field",
+									"value": "name"
+								},
+								{
+									"key": "value",
+									"value": "John"
+								}
+							]
+						},
+						"description": "Rechercher des utilisateurs par champ"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Interventions",
+			"item": [
+				{
+					"name": "Create Intervention",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"titre\": \"Réparation système\",\n  \"dateStart\": \"25/10/2025\",\n  \"dateEnd\": \"26/10/2025\",\n  \"status\": 1,\n  \"priority\": \"high\",\n  \"customer\": \"Client ABC\",\n  \"long\": 45.123,\n  \"lat\": 2.456,\n  \"distance\": 10.5,\n  \"description\": \"Réparation du système de ventilation\",\n  \"userId\": \"{{user_id}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/interventions",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"interventions"
+							]
+						},
+						"description": "Créer une nouvelle intervention"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Interventions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/interventions",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"interventions"
+							]
+						},
+						"description": "Récupérer toutes les interventions"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Intervention by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/interventions/{{intervention_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"interventions",
+								"{{intervention_id}}"
+							]
+						},
+						"description": "Récupérer une intervention par son ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Intervention",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"titre\": \"Réparation système - Mise à jour\",\n  \"status\": 2,\n  \"priority\": \"medium\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/interventions/{{intervention_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"interventions",
+								"{{intervention_id}}"
+							]
+						},
+						"description": "Mettre à jour une intervention"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Intervention",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/interventions/{{intervention_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"interventions",
+								"{{intervention_id}}"
+							]
+						},
+						"description": "Supprimer une intervention"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Interventions Count",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/interventions/count",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"interventions",
+								"count"
+							]
+						},
+						"description": "Compter le nombre d'interventions"
+					},
+					"response": []
+				},
+				{
+					"name": "Search Interventions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/interventions/search?field=titre&value=Réparation",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"interventions",
+								"search"
+							],
+							"query": [
+								{
+									"key": "field",
+									"value": "titre"
+								},
+								{
+									"key": "value",
+									"value": "Réparation"
+								}
+							]
+						},
+						"description": "Rechercher des interventions par champ"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Materiels",
+			"item": [
+				{
+					"name": "Create Materiel",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Vis M6x20\",\n  \"quantity\": 50,\n  \"idIntervention\": \"{{intervention_id}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/materiels",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"materiels"
+							]
+						},
+						"description": "Créer un nouveau matériel"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Materiels",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/materiels",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"materiels"
+							]
+						},
+						"description": "Récupérer tous les matériels"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Materiel by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/materiels/{{materiel_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"materiels",
+								"{{materiel_id}}"
+							]
+						},
+						"description": "Récupérer un matériel par son ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Materiel",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Vis M6x20 - Mise à jour\",\n  \"quantity\": 75\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/materiels/{{materiel_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"materiels",
+								"{{materiel_id}}"
+							]
+						},
+						"description": "Mettre à jour un matériel"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Materiel",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/materiels/{{materiel_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"materiels",
+								"{{materiel_id}}"
+							]
+						},
+						"description": "Supprimer un matériel"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Materiels Count",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/materiels/count",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"materiels",
+								"count"
+							]
+						},
+						"description": "Compter le nombre de matériels"
+					},
+					"response": []
+				},
+				{
+					"name": "Search Materiels",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/materiels/search?field=name&value=Vis",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"materiels",
+								"search"
+							],
+							"query": [
+								{
+									"key": "field",
+									"value": "name"
+								},
+								{
+									"key": "value",
+									"value": "Vis"
+								}
+							]
+						},
+						"description": "Rechercher des matériels par champ"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Timesheets",
+			"item": [
+				{
+					"name": "Create Timesheet",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"description\": \"Travail sur la réparation du système\",\n  \"timeAllocated\": 2.5,\n  \"date\": \"25/10/2025\",\n  \"idIntervention\": \"{{intervention_id}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/timesheets",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"timesheets"
+							]
+						},
+						"description": "Créer un nouveau timesheet"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Timesheets",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/timesheets",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"timesheets"
+							]
+						},
+						"description": "Récupérer tous les timesheets"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Timesheet by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/timesheets/{{timesheet_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"timesheets",
+								"{{timesheet_id}}"
+							]
+						},
+						"description": "Récupérer un timesheet par son ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Timesheet",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"description\": \"Travail sur la réparation du système - Mise à jour\",\n  \"timeAllocated\": 3.0\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/timesheets/{{timesheet_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"timesheets",
+								"{{timesheet_id}}"
+							]
+						},
+						"description": "Mettre à jour un timesheet"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Timesheet",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/timesheets/{{timesheet_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"timesheets",
+								"{{timesheet_id}}"
+							]
+						},
+						"description": "Supprimer un timesheet"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Timesheets Count",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/timesheets/count",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"timesheets",
+								"count"
+							]
+						},
+						"description": "Compter le nombre de timesheets"
+					},
+					"response": []
+				},
+				{
+					"name": "Search Timesheets",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/timesheets/search?field=description&value=Travail",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"timesheets",
+								"search"
+							],
+							"query": [
+								{
+									"key": "field",
+									"value": "description"
+								},
+								{
+									"key": "value",
+									"value": "Travail"
+								}
+							]
+						},
+						"description": "Rechercher des timesheets par champ"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Images",
+			"item": [
+				{
+					"name": "Create Image",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"ic\": 1,\n  \"filename\": \"example_file.png\",\n  \"data\": \"base64_encoded_string_here\",\n  \"idIntervention\": \"{{intervention_id}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/images",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"images"
+							]
+						},
+						"description": "Créer une nouvelle image"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Images",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/images",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"images"
+							]
+						},
+						"description": "Récupérer toutes les images"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Image by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/images/{{image_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"images",
+								"{{image_id}}"
+							]
+						},
+						"description": "Récupérer une image par son ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Image",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"filename\": \"updated_file.png\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/images/{{image_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"images",
+								"{{image_id}}"
+							]
+						},
+						"description": "Mettre à jour une image"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Image",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/images/{{image_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"images",
+								"{{image_id}}"
+							]
+						},
+						"description": "Supprimer une image"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Documents",
+			"item": [
+				{
+					"name": "Create Document",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"filename\": \"example_file.txt\",\n  \"data\": \"base64_encoded_string_here\",\n  \"idIntervention\": \"{{intervention_id}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/documents",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"documents"
+							]
+						},
+						"description": "Créer un nouveau document"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Documents",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/documents",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"documents"
+							]
+						},
+						"description": "Récupérer tous les documents"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Document by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/documents/{{document_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"documents",
+								"{{document_id}}"
+							]
+						},
+						"description": "Récupérer un document par son ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Document",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"filename\": \"updated_file.txt\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/documents/{{document_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"documents",
+								"{{document_id}}"
+							]
+						},
+						"description": "Mettre à jour un document"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Document",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/documents/{{document_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"documents",
+								"{{document_id}}"
+							]
+						},
+						"description": "Supprimer un document"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Comments",
+			"item": [
+				{
+					"name": "Create Comment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"message\": \"This is a comment\",\n  \"date\": \"25/10/2025\",\n  \"filename\": \"example_file.txt\",\n  \"data\": \"base64_encoded_string_here\",\n  \"idIntervention\": \"{{intervention_id}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/comments",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"comments"
+							]
+						},
+						"description": "Créer un nouveau commentaire"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Comments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/comments",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"comments"
+							]
+						},
+						"description": "Récupérer tous les commentaires"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Comment by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/comments/{{comment_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"comments",
+								"{{comment_id}}"
+							]
+						},
+						"description": "Récupérer un commentaire par son ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Comment",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"message\": \"Updated comment\",\n  \"date\": \"26/10/2025\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/comments/{{comment_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"comments",
+								"{{comment_id}}"
+							]
+						},
+						"description": "Mettre à jour un commentaire"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Comment",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/comments/{{comment_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"comments",
+								"{{comment_id}}"
+							]
+						},
+						"description": "Supprimer un commentaire"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Comments Count",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/comments/count",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"comments",
+								"count"
+							]
+						},
+						"description": "Compter le nombre de commentaires"
+					},
+					"response": []
+				},
+				{
+					"name": "Search Comments",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/comments/search?field=message&value=comment",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"comments",
+								"search"
+							],
+							"query": [
+								{
+									"key": "field",
+									"value": "message"
+								},
+								{
+									"key": "value",
+									"value": "comment"
+								}
+							]
+						},
+						"description": "Rechercher des commentaires par champ"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Signatures",
+			"item": [
+				{
+					"name": "Create Signature",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"filename\": \"signature.png\",\n  \"data\": \"base64_encoded_string_here\",\n  \"idIntervention\": \"{{intervention_id}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/signatures",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"signatures"
+							]
+						},
+						"description": "Créer une nouvelle signature"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Signatures",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/signatures",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"signatures"
+							]
+						},
+						"description": "Récupérer toutes les signatures"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Signature by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/signatures/{{signature_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"signatures",
+								"{{signature_id}}"
+							]
+						},
+						"description": "Récupérer une signature par son ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Signature",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"filename\": \"updated_signature.png\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/signatures/{{signature_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"signatures",
+								"{{signature_id}}"
+							]
+						},
+						"description": "Mettre à jour une signature"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Signature",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/signatures/{{signature_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"signatures",
+								"{{signature_id}}"
+							]
+						},
+						"description": "Supprimer une signature"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "auth_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "user_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "user_email",
+			"value": "john@example.com",
+			"type": "string"
+		},
+		{
+			"key": "intervention_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "materiel_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "timesheet_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "image_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "document_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "comment_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "signature_id",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

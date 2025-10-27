@@ -15,8 +15,16 @@ export class InterventionService extends BaseService<Intervention, CreateInterve
   /**
    * Crée une nouvelle intervention avec validation métier
    */
-  async createIntervention(interventionData: CreateInterventionDTO): Promise<ServiceResponse> {
+  async createIntervention(interventionData: CreateInterventionDTO & { userId: string }): Promise<ServiceResponse> {
     try {
+      if (!interventionData.userId) {
+        return {
+          success: false,
+          message: "L'ID utilisateur est requis",
+          error: "MISSING_USER_ID"
+        };
+      }
+
       const interventionDataToCreate: CreateInterventionData = {
         titre: interventionData.titre.trim(),
         dateStart: interventionData.dateStart.trim(),

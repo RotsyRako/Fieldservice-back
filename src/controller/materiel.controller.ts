@@ -31,7 +31,7 @@ export class MaterielController extends BaseController<Materiel, CreateMaterielD
       return res.status(201).json(ok(result.message, result.data));
 
     } catch (error: any) {
-      console.error("❌ Erreur dans MaterielController.createMateriel:", error);
+      console.error("Erreur dans MaterielController.createMateriel:", error);
       return res.status(500).json(fail("Erreur serveur interne"));
     }
   };

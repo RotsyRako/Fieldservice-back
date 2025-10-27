@@ -4,6 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
+const swagger_1 = require("./swagger");
 const error_handler_1 = require("./middleware/error_handler");
 const database_connection_1 = require("./utils/database_connection");
 const app_router_1 = require("./app_router");
@@ -12,6 +14,15 @@ const app = (0, express_1.default)();
 // Middleware global
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
+// Configuration Swagger
+app.get("/api-docs.json", (req, res) => {
+    res.setHeader("Content-Type", "application/json");
+    res.send(swagger_1.swaggerSpec);
+});
+app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_1.swaggerSpec, {
+    customCss: '.swagger-ui .topbar { display: none }',
+    customSiteTitle: "Rotsy API Documentation",
+}));
 // Configuration des routes
 (0, app_router_1.configureRoutes)(app);
 // Middleware global d'erreurs en dernier
@@ -32,6 +43,7 @@ async function startServer() {
         app.listen(config_1.config.server.port, () => {
             console.log(`🚀 Server running on http://localhost:${config_1.config.server.port}`);
             console.log(`📊 Health check: http://localhost:${config_1.config.server.port}/health`);
+            console.log(`📚 API Documentation: http://localhost:${config_1.config.server.port}/api-docs`);
         });
     }
     catch (error) {

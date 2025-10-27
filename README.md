@@ -50,6 +50,20 @@ npm run build && npm start  # Mode production
 
 Le serveur sera accessible sur `http://localhost:3000`
 
+### 📚 Documentation API avec Swagger
+
+Une fois le serveur démarré, accédez à la documentation Swagger interactive :
+
+- **Interface Swagger UI** : http://localhost:3000/api-docs
+- **JSON de spécification** : http://localhost:3000/api-docs.json
+
+La documentation Swagger fournit :
+- ✅ Toutes les routes API disponibles
+- ✅ Définitions des schémas de données
+- ✅ Endpoints testables directement depuis l'interface
+- ✅ Authentification JWT intégrée
+- ✅ Exemples de requêtes et réponses
+
 ## 📚 Documentation d'Utilisation
 
 ### 🔧 Ajouter une Variable d'Environnement

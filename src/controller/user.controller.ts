@@ -31,7 +31,7 @@ export class UserController extends BaseController<User, CreateUserData, UpdateU
       return res.status(201).json(ok(result.message, result.data));
 
     } catch (error: any) {
-      console.error("❌ Erreur dans UserController.createUser:", error);
+      console.error("Erreur dans UserController.createUser:", error);
       return res.status(500).json(fail("Erreur serveur interne"));
     }
   };
@@ -52,7 +52,7 @@ export class UserController extends BaseController<User, CreateUserData, UpdateU
       return res.status(200).json(ok(result.message, result.data));
 
     } catch (error: any) {
-      console.error("❌ Erreur dans UserController.authenticateUser:", error);
+      console.error("Erreur dans UserController.authenticateUser:", error);
       return res.status(500).json(fail("Erreur serveur interne"));
     }
   };
@@ -73,7 +73,7 @@ export class UserController extends BaseController<User, CreateUserData, UpdateU
       return res.status(200).json(ok(result.message, result.data));
 
     } catch (error: any) {
-      console.error("❌ Erreur dans UserController.getUserByEmail:", error);
+      console.error("Erreur dans UserController.getUserByEmail:", error);
       return res.status(500).json(fail("Erreur serveur interne"));
     }
   };
@@ -96,7 +96,7 @@ export class UserController extends BaseController<User, CreateUserData, UpdateU
       return res.status(200).json(ok(result.message, result.data));
 
     } catch (error: any) {
-      console.error("❌ Erreur dans UserController.updateUser:", error);
+      console.error("Erreur dans UserController.updateUser:", error);
       return res.status(500).json(fail("Erreur serveur interne"));
     }
   };
