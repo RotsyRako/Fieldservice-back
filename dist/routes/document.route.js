@@ -13,6 +13,7 @@ router.get("/documents/search", auth_1.optionalAuth, document_controller_1.docum
 // Routes nécessitant une authentification obligatoire
 router.post("/documents", auth_1.authenticateToken, (0, validate_1.validate)(document_dto_1.CreateDocumentSchema), document_controller_1.documentController.createDocument);
 router.get("/documents/:id", auth_1.authenticateToken, document_controller_1.documentController.getById);
+router.get("/documents/interventions/:idIntervention", auth_1.authenticateToken, document_controller_1.documentController.getByInterventionId);
 router.put("/documents/:id", auth_1.authenticateToken, (0, validate_1.validate)(document_dto_1.UpdateDocumentSchema), document_controller_1.documentController.update);
 router.delete("/documents/:id", auth_1.authenticateToken, document_controller_1.documentController.delete);
 exports.default = router;

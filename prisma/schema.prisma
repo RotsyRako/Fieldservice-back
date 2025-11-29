@@ -4,7 +4,8 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  // The 'url' property is no longer supported here in Prisma 5+.
+  // Move your connection string to prisma.config.ts.
 }
 
 model User {
@@ -66,7 +67,6 @@ model Timesheet {
 
 model Image {
   id             String       @id @default(uuid())
-  ic             Int
   filename       String
   data           String       @db.Text
   idIntervention String

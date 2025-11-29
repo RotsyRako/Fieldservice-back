@@ -37,10 +37,17 @@ class JWTUtils {
     }
     /**
      * Vérifie et décode un token JWT
+     * Ignore l'expiration pour que le token soit toujours valide
      */
     static verifyToken(token) {
         try {
-            const decoded = jsonwebtoken_1.default.verify(token, this.JWT_SECRET);
+            // Décoder sans vérifier l'expiration
+            const decoded = jsonwebtoken_1.default.decode(token);
+            if (!decoded) {
+                throw new Error("Token invalide");
+            }
+            // Vérifier seulement la signature (sans vérifier l'expiration)
+            jsonwebtoken_1.default.verify(token, this.JWT_SECRET, { ignoreExpiration: true });
             return decoded;
         }
         catch (error) {

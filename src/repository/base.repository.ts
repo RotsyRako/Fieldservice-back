@@ -196,6 +196,25 @@ export abstract class BaseRepository<T extends BaseEntity, CreateInput, UpdateIn
   }
 
   /**
+   * Crée ou met à jour une entité selon si l'ID existe déjà (upsert)
+   * Si l'ID est fourni et existe, met à jour. Sinon, crée une nouvelle entité.
+   */
+  async upsert(id: string | undefined, createData: CreateInput, updateData: UpdateInput): Promise<Omit<T, 'password'>> {
+    if (id) {
+      // Si un ID est fourni, utiliser upsert Prisma
+      return await this.model.upsert({
+        where: { id },
+        create: { ...createData, id },
+        update: updateData,
+        select: this.getSelectFields(),
+      });
+    } else {
+      // Si aucun ID n'est fourni, créer une nouvelle entité
+      return await this.create(createData);
+    }
+  }
+
+  /**
    * Méthode abstraite pour définir les champs à sélectionner
    * Doit être implémentée par chaque repository spécifique
    */

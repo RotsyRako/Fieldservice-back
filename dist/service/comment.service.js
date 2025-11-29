@@ -61,6 +61,22 @@ class CommentService extends base_service_1.BaseService {
             return this.handleError(error, "Erreur lors de la création du commentaire");
         }
     }
+    /**
+     * Récupère les commentaires par intervention avec pagination
+     */
+    async findManyByInterventionId(idIntervention, options = {}) {
+        try {
+            const data = await this.commentRepository.findMany({ idIntervention }, options);
+            return {
+                success: true,
+                data,
+                message: "Commentaires récupérés avec succès",
+            };
+        }
+        catch (error) {
+            return this.handleError(error, "Erreur lors de la récupération des commentaires par intervention");
+        }
+    }
     async validateCreate(data) {
         if (!data.message || data.message.trim().length === 0) {
             throw new Error("Le message est requis");

@@ -2,6 +2,7 @@ import { SignatureRepository, CreateSignatureData, UpdateSignatureData } from ".
 import { CreateSignatureDTO } from "../model/dto/signature.dto";
 import { BaseService, ServiceResponse } from "./base.service";
 import { Signature } from "@prisma/client";
+import { PaginationOptions } from "../repository/base.repository";
 
 export class SignatureService extends BaseService<Signature, CreateSignatureData, UpdateSignatureData> {
   private signatureRepository: SignatureRepository;
@@ -25,6 +26,22 @@ export class SignatureService extends BaseService<Signature, CreateSignatureData
 
     } catch (error: any) {
       return this.handleError(error, "Erreur lors de la création de la signature");
+    }
+  }
+
+  /**
+   * Récupère les signatures par intervention avec pagination
+   */
+  async findManyByInterventionId(idIntervention: string, options: PaginationOptions = {}): Promise<ServiceResponse<Signature[]>> {
+    try {
+      const data = await this.signatureRepository.findMany({ idIntervention }, options);
+      return {
+        success: true,
+        data,
+        message: "Signatures récupérées avec succès",
+      };
+    } catch (error: any) {
+      return this.handleError(error, "Erreur lors de la récupération des signatures par intervention");
     }
   }
 

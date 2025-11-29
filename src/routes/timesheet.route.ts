@@ -14,6 +14,7 @@ router.get("/timesheets/search", optionalAuth, timesheetController.findByField);
 // Routes nécessitant une authentification obligatoire
 router.post("/timesheets", authenticateToken, validate(CreateTimesheetSchema), timesheetController.createTimesheet);
 router.get("/timesheets/:id", authenticateToken, timesheetController.getById);
+router.get("/timesheets/interventions/:idIntervention", authenticateToken, timesheetController.getByInterventionId);
 router.put("/timesheets/:id", authenticateToken, validate(UpdateTimesheetSchema), timesheetController.update);
 router.delete("/timesheets/:id", authenticateToken, timesheetController.delete);
 

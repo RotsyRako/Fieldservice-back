@@ -14,6 +14,7 @@ router.get("/comments/search", optionalAuth, commentController.findByField);
 // Routes nécessitant une authentification obligatoire
 router.post("/comments", authenticateToken, validate(CreateCommentSchema), commentController.createComment);
 router.get("/comments/:id", authenticateToken, commentController.getById);
+router.get("/comments/interventions/:idIntervention", authenticateToken, commentController.getByInterventionId);
 router.put("/comments/:id", authenticateToken, validate(UpdateCommentSchema), commentController.update);
 router.delete("/comments/:id", authenticateToken, commentController.delete);
 

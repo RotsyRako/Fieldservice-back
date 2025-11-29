@@ -12,8 +12,9 @@ const app_router_1 = require("./app_router");
 const config_1 = require("./utils/config");
 const app = (0, express_1.default)();
 // Middleware global
-app.use(express_1.default.json());
-app.use(express_1.default.urlencoded({ extended: true }));
+// Augmenter la limite de taille du body pour gérer les images/documents en base64
+app.use(express_1.default.json({ limit: '50mb' }));
+app.use(express_1.default.urlencoded({ extended: true, limit: '50mb' }));
 // Configuration Swagger
 app.get("/api-docs.json", (req, res) => {
     res.setHeader("Content-Type", "application/json");

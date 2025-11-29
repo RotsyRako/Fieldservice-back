@@ -10,7 +10,6 @@ class ImageRepository extends base_repository_1.BaseRepository {
     getSelectFields() {
         return {
             id: true,
-            ic: true,
             filename: true,
             data: true,
             idIntervention: true,

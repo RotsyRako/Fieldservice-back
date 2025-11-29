@@ -14,6 +14,7 @@ router.get("/documents/search", optionalAuth, documentController.findByField);
 // Routes nécessitant une authentification obligatoire
 router.post("/documents", authenticateToken, validate(CreateDocumentSchema), documentController.createDocument);
 router.get("/documents/:id", authenticateToken, documentController.getById);
+router.get("/documents/interventions/:idIntervention", authenticateToken, documentController.getByInterventionId);
 router.put("/documents/:id", authenticateToken, validate(UpdateDocumentSchema), documentController.update);
 router.delete("/documents/:id", authenticateToken, documentController.delete);
 

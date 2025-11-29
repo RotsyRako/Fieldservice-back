@@ -2,6 +2,7 @@ import { DocumentRepository, CreateDocumentData, UpdateDocumentData } from "../r
 import { CreateDocumentDTO } from "../model/dto/document.dto";
 import { BaseService, ServiceResponse } from "./base.service";
 import { Document } from "@prisma/client";
+import { PaginationOptions } from "../repository/base.repository";
 
 export class DocumentService extends BaseService<Document, CreateDocumentData, UpdateDocumentData> {
   private documentRepository: DocumentRepository;
@@ -25,6 +26,22 @@ export class DocumentService extends BaseService<Document, CreateDocumentData, U
 
     } catch (error: any) {
       return this.handleError(error, "Erreur lors de la création du document");
+    }
+  }
+
+  /**
+   * Récupère les documents par intervention avec pagination
+   */
+  async findManyByInterventionId(idIntervention: string, options: PaginationOptions = {}): Promise<ServiceResponse<Document[]>> {
+    try {
+      const data = await this.documentRepository.findMany({ idIntervention }, options);
+      return {
+        success: true,
+        data,
+        message: "Documents récupérés avec succès",
+      };
+    } catch (error: any) {
+      return this.handleError(error, "Erreur lors de la récupération des documents par intervention");
     }
   }
 

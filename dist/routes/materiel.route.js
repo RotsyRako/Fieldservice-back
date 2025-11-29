@@ -13,6 +13,7 @@ router.get("/materiels/search", auth_1.optionalAuth, materiel_controller_1.mater
 // Routes nécessitant une authentification obligatoire
 router.post("/materiels", auth_1.authenticateToken, (0, validate_1.validate)(materiel_dto_1.CreateMaterielSchema), materiel_controller_1.materielController.createMateriel);
 router.get("/materiels/:id", auth_1.authenticateToken, materiel_controller_1.materielController.getById);
+router.get("/materiels/interventions/:idIntervention", auth_1.authenticateToken, materiel_controller_1.materielController.getByInterventionId);
 router.put("/materiels/:id", auth_1.authenticateToken, (0, validate_1.validate)(materiel_dto_1.UpdateMaterielSchema), materiel_controller_1.materielController.update);
 router.delete("/materiels/:id", auth_1.authenticateToken, materiel_controller_1.materielController.delete);
 exports.default = router;

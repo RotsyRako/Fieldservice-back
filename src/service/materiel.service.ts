@@ -2,6 +2,7 @@ import { MaterielRepository, CreateMaterielData, UpdateMaterielData } from "../r
 import { CreateMaterielDTO } from "../model/dto/materiel.dto";
 import { BaseService, ServiceResponse } from "./base.service";
 import { Materiel } from "@prisma/client";
+import { PaginationOptions } from "../repository/base.repository";
 
 export class MaterielService extends BaseService<Materiel, CreateMaterielData, UpdateMaterielData> {
   private materielRepository: MaterielRepository;
@@ -28,6 +29,22 @@ export class MaterielService extends BaseService<Materiel, CreateMaterielData, U
 
     } catch (error: any) {
       return this.handleError(error, "Erreur lors de la création du matériel");
+    }
+  }
+
+  /**
+   * Récupère les matériels par intervention avec pagination
+   */
+  async findManyByInterventionId(idIntervention: string, options: PaginationOptions = {}): Promise<ServiceResponse<Materiel[]>> {
+    try {
+      const data = await this.materielRepository.findMany({ idIntervention }, options);
+      return {
+        success: true,
+        data,
+        message: "Matériels récupérés avec succès",
+      };
+    } catch (error: any) {
+      return this.handleError(error, "Erreur lors de la récupération des matériels par intervention");
     }
   }
 

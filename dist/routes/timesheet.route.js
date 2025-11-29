@@ -13,6 +13,7 @@ router.get("/timesheets/search", auth_1.optionalAuth, timesheet_controller_1.tim
 // Routes nécessitant une authentification obligatoire
 router.post("/timesheets", auth_1.authenticateToken, (0, validate_1.validate)(timesheet_dto_1.CreateTimesheetSchema), timesheet_controller_1.timesheetController.createTimesheet);
 router.get("/timesheets/:id", auth_1.authenticateToken, timesheet_controller_1.timesheetController.getById);
+router.get("/timesheets/interventions/:idIntervention", auth_1.authenticateToken, timesheet_controller_1.timesheetController.getByInterventionId);
 router.put("/timesheets/:id", auth_1.authenticateToken, (0, validate_1.validate)(timesheet_dto_1.UpdateTimesheetSchema), timesheet_controller_1.timesheetController.update);
 router.delete("/timesheets/:id", auth_1.authenticateToken, timesheet_controller_1.timesheetController.delete);
 exports.default = router;

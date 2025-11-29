@@ -13,6 +13,7 @@ router.get("/comments/search", auth_1.optionalAuth, comment_controller_1.comment
 // Routes nécessitant une authentification obligatoire
 router.post("/comments", auth_1.authenticateToken, (0, validate_1.validate)(comment_dto_1.CreateCommentSchema), comment_controller_1.commentController.createComment);
 router.get("/comments/:id", auth_1.authenticateToken, comment_controller_1.commentController.getById);
+router.get("/comments/interventions/:idIntervention", auth_1.authenticateToken, comment_controller_1.commentController.getByInterventionId);
 router.put("/comments/:id", auth_1.authenticateToken, (0, validate_1.validate)(comment_dto_1.UpdateCommentSchema), comment_controller_1.commentController.update);
 router.delete("/comments/:id", auth_1.authenticateToken, comment_controller_1.commentController.delete);
 exports.default = router;

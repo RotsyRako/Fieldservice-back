@@ -1,14 +1,12 @@
 import { z } from "zod";
 
 export const CreateImageSchema = z.object({
-  ic: z.number().int().positive("IC doit être un entier positif"),
   filename: z.string().min(1, "Le nom de fichier est requis"),
   data: z.string().min(1, "Les données sont requises"),
   idIntervention: z.string().uuid("L'ID d'intervention doit être un UUID valide"),
 });
 
 export const UpdateImageSchema = z.object({
-  ic: z.number().int().positive("IC doit être un entier positif").optional(),
   filename: z.string().min(1, "Le nom de fichier est requis").optional(),
   data: z.string().min(1, "Les données sont requises").optional(),
   idIntervention: z.string().uuid("L'ID d'intervention doit être un UUID valide").optional(),

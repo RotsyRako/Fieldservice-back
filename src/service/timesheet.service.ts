@@ -2,6 +2,7 @@ import { TimesheetRepository, CreateTimesheetData, UpdateTimesheetData } from ".
 import { CreateTimesheetDTO } from "../model/dto/timesheet.dto";
 import { BaseService, ServiceResponse } from "./base.service";
 import { Timesheet } from "@prisma/client";
+import { PaginationOptions } from "../repository/base.repository";
 
 export class TimesheetService extends BaseService<Timesheet, CreateTimesheetData, UpdateTimesheetData> {
   private timesheetRepository: TimesheetRepository;
@@ -29,6 +30,22 @@ export class TimesheetService extends BaseService<Timesheet, CreateTimesheetData
 
     } catch (error: any) {
       return this.handleError(error, "Erreur lors de la création du timesheet");
+    }
+  }
+
+  /**
+   * Récupère les timesheets par intervention avec pagination
+   */
+  async findManyByInterventionId(idIntervention: string, options: PaginationOptions = {}): Promise<ServiceResponse<Timesheet[]>> {
+    try {
+      const data = await this.timesheetRepository.findMany({ idIntervention }, options);
+      return {
+        success: true,
+        data,
+        message: "Timesheets récupérés avec succès",
+      };
+    } catch (error: any) {
+      return this.handleError(error, "Erreur lors de la récupération des timesheets par intervention");
     }
   }
 

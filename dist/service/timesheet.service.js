@@ -61,6 +61,22 @@ class TimesheetService extends base_service_1.BaseService {
         }
     }
     /**
+     * Récupère les timesheets par intervention avec pagination
+     */
+    async findManyByInterventionId(idIntervention, options = {}) {
+        try {
+            const data = await this.timesheetRepository.findMany({ idIntervention }, options);
+            return {
+                success: true,
+                data,
+                message: "Timesheets récupérés avec succès",
+            };
+        }
+        catch (error) {
+            return this.handleError(error, "Erreur lors de la récupération des timesheets par intervention");
+        }
+    }
+    /**
      * Validation métier avant création
      */
     async validateCreate(data) {

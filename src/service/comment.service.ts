@@ -2,6 +2,7 @@ import { CommentRepository, CreateCommentData, UpdateCommentData } from "../repo
 import { CreateCommentDTO } from "../model/dto/comment.dto";
 import { BaseService, ServiceResponse } from "./base.service";
 import { Comment } from "@prisma/client";
+import { PaginationOptions } from "../repository/base.repository";
 
 export class CommentService extends BaseService<Comment, CreateCommentData, UpdateCommentData> {
   private commentRepository: CommentRepository;
@@ -32,6 +33,22 @@ export class CommentService extends BaseService<Comment, CreateCommentData, Upda
     } catch (error: any) {
       console.error("❌ Erreur dans CommentService.createComment:", error);
       return this.handleError(error, "Erreur lors de la création du commentaire");
+    }
+  }
+
+  /**
+   * Récupère les commentaires par intervention avec pagination
+   */
+  async findManyByInterventionId(idIntervention: string, options: PaginationOptions = {}): Promise<ServiceResponse<Comment[]>> {
+    try {
+      const data = await this.commentRepository.findMany({ idIntervention }, options);
+      return {
+        success: true,
+        data,
+        message: "Commentaires récupérés avec succès",
+      };
+    } catch (error: any) {
+      return this.handleError(error, "Erreur lors de la récupération des commentaires par intervention");
     }
   }
 

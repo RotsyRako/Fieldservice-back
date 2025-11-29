@@ -12,6 +12,7 @@ const image_route_1 = __importDefault(require("./routes/image.route"));
 const document_route_1 = __importDefault(require("./routes/document.route"));
 const comment_route_1 = __importDefault(require("./routes/comment.route"));
 const signature_route_1 = __importDefault(require("./routes/signature.route"));
+const recognizeImage_route_1 = __importDefault(require("./routes/recognizeImage.route"));
 /**
  * Configure toutes les routes de l'application
  * @param app - Instance Express
@@ -32,4 +33,5 @@ function configureRoutes(app) {
     app.use("/api", document_route_1.default);
     app.use("/api", comment_route_1.default);
     app.use("/api", signature_route_1.default);
+    app.use("/api", recognizeImage_route_1.default);
 }

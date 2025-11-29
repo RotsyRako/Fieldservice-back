@@ -8,6 +8,7 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const user_repository_1 = require("../repository/user.repository");
 const base_service_1 = require("./base.service");
 const jwt_utils_1 = require("../utils/jwt.utils");
+const base_response_utils_1 = require("../utils/base_response.utils");
 class UserService extends base_service_1.BaseService {
     constructor() {
         const userRepository = new user_repository_1.UserRepository();
@@ -83,14 +84,12 @@ class UserService extends base_service_1.BaseService {
             const { password: _, ...userWithoutPassword } = user;
             // Générer le token JWT avec les données utilisateur
             const jwtToken = jwt_utils_1.JWTUtils.generateToken(userWithoutPassword);
-            return {
-                success: true,
-                data: {
-                    user: userWithoutPassword,
-                    token: jwtToken
-                },
-                message: "Authentification réussie"
+            const userWithToken = {
+                ...userWithoutPassword,
+                token: jwtToken
             };
+            const result = (0, base_response_utils_1.ok)("Authentification réussie", userWithToken);
+            return result;
         }
         catch (error) {
             return this.handleError(error, "Erreur lors de l'authentification");

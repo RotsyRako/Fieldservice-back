@@ -9,8 +9,9 @@ import { config, validateConfig, displayConfig } from "./utils/config";
 const app = express();
 
 // Middleware global
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// Augmenter la limite de taille du body pour gérer les images/documents en base64
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // Configuration Swagger
 app.get("/api-docs.json", (req, res) => {

@@ -4,6 +4,7 @@ import { CreateUserDTO } from "../model/dto/user.dto";
 import { BaseService, ServiceResponse } from "./base.service";
 import { User } from "@prisma/client";
 import { JWTUtils } from "../utils/jwt.utils";
+import { ok } from "../utils/base_response.utils";
 
 export class UserService extends BaseService<User, CreateUserData, UpdateUserData> {
   private userRepository: UserRepository;
@@ -97,14 +98,14 @@ export class UserService extends BaseService<User, CreateUserData, UpdateUserDat
       // Générer le token JWT avec les données utilisateur
       const jwtToken = JWTUtils.generateToken(userWithoutPassword);
 
-      return {
-        success: true,
-        data: {
-          user: userWithoutPassword,
-          token: jwtToken
-        },
-        message: "Authentification réussie"
+      const userWithToken = {
+        ...userWithoutPassword,
+        token: jwtToken
       };
+      
+      const result = ok("Authentification réussie", userWithToken);
+
+      return result;
 
     } catch (error: any) {
       return this.handleError(error, "Erreur lors de l'authentification");

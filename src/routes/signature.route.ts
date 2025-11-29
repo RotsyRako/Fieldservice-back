@@ -14,6 +14,7 @@ router.get("/signatures/search", optionalAuth, signatureController.findByField);
 // Routes nécessitant une authentification obligatoire
 router.post("/signatures", authenticateToken, validate(CreateSignatureSchema), signatureController.createSignature);
 router.get("/signatures/:id", authenticateToken, signatureController.getById);
+router.get("/signatures/interventions/:idIntervention", authenticateToken, signatureController.getByInterventionId);
 router.put("/signatures/:id", authenticateToken, validate(UpdateSignatureSchema), signatureController.update);
 router.delete("/signatures/:id", authenticateToken, signatureController.delete);
 

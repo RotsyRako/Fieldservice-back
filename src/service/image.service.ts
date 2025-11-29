@@ -2,6 +2,7 @@ import { ImageRepository, CreateImageData, UpdateImageData } from "../repository
 import { CreateImageDTO } from "../model/dto/image.dto";
 import { BaseService, ServiceResponse } from "./base.service";
 import { Image } from "@prisma/client";
+import { PaginationOptions } from "../repository/base.repository";
 
 export class ImageService extends BaseService<Image, CreateImageData, UpdateImageData> {
   private imageRepository: ImageRepository;
@@ -15,7 +16,6 @@ export class ImageService extends BaseService<Image, CreateImageData, UpdateImag
   async createImage(imageData: CreateImageDTO): Promise<ServiceResponse> {
     try {
       const imageDataToCreate: CreateImageData = {
-        ic: imageData.ic,
         filename: imageData.filename.trim(),
         data: imageData.data,
         idIntervention: imageData.idIntervention,
@@ -26,6 +26,22 @@ export class ImageService extends BaseService<Image, CreateImageData, UpdateImag
 
     } catch (error: any) {
       return this.handleError(error, "Erreur lors de la création de l'image");
+    }
+  }
+
+  /**
+   * Récupère les images par intervention avec pagination
+   */
+  async findManyByInterventionId(idIntervention: string, options: PaginationOptions = {}): Promise<ServiceResponse<Image[]>> {
+    try {
+      const data = await this.imageRepository.findMany({ idIntervention }, options);
+      return {
+        success: true,
+        data,
+        message: "Images récupérées avec succès",
+      };
+    } catch (error: any) {
+      return this.handleError(error, "Erreur lors de la récupération des images par intervention");
     }
   }
 

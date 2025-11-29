@@ -14,6 +14,7 @@ router.get("/images/search", optionalAuth, imageController.findByField);
 // Routes nécessitant une authentification obligatoire
 router.post("/images", authenticateToken, validate(CreateImageSchema), imageController.createImage);
 router.get("/images/:id", authenticateToken, imageController.getById);
+router.get("/images/interventions/:idIntervention", authenticateToken, imageController.getByInterventionId);
 router.put("/images/:id", authenticateToken, validate(UpdateImageSchema), imageController.update);
 router.delete("/images/:id", authenticateToken, imageController.delete);
 

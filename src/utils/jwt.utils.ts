@@ -58,10 +58,20 @@ export class JWTUtils {
 
   /**
    * Vérifie et décode un token JWT
+   * Ignore l'expiration pour que le token soit toujours valide
    */
   static verifyToken(token: string): JWTPayload {
     try {
-      const decoded = jwt.verify(token, this.JWT_SECRET) as JWTPayload;
+      // Décoder sans vérifier l'expiration
+      const decoded = jwt.decode(token) as JWTPayload;
+      
+      if (!decoded) {
+        throw new Error("Token invalide");
+      }
+
+      // Vérifier seulement la signature (sans vérifier l'expiration)
+      jwt.verify(token, this.JWT_SECRET, { ignoreExpiration: true });
+      
       return decoded;
     } catch (error) {
       throw new Error("Token invalide ou expiré");

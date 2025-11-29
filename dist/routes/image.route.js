@@ -13,6 +13,7 @@ router.get("/images/search", auth_1.optionalAuth, image_controller_1.imageContro
 // Routes nécessitant une authentification obligatoire
 router.post("/images", auth_1.authenticateToken, (0, validate_1.validate)(image_dto_1.CreateImageSchema), image_controller_1.imageController.createImage);
 router.get("/images/:id", auth_1.authenticateToken, image_controller_1.imageController.getById);
+router.get("/images/interventions/:idIntervention", auth_1.authenticateToken, image_controller_1.imageController.getByInterventionId);
 router.put("/images/:id", auth_1.authenticateToken, (0, validate_1.validate)(image_dto_1.UpdateImageSchema), image_controller_1.imageController.update);
 router.delete("/images/:id", auth_1.authenticateToken, image_controller_1.imageController.delete);
 exports.default = router;

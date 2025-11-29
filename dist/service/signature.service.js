@@ -56,6 +56,22 @@ class SignatureService extends base_service_1.BaseService {
             return this.handleError(error, "Erreur lors de la création de la signature");
         }
     }
+    /**
+     * Récupère les signatures par intervention avec pagination
+     */
+    async findManyByInterventionId(idIntervention, options = {}) {
+        try {
+            const data = await this.signatureRepository.findMany({ idIntervention }, options);
+            return {
+                success: true,
+                data,
+                message: "Signatures récupérées avec succès",
+            };
+        }
+        catch (error) {
+            return this.handleError(error, "Erreur lors de la récupération des signatures par intervention");
+        }
+    }
     async validateCreate(data) {
         if (!data.filename || data.filename.trim().length === 0) {
             throw new Error("Le nom de fichier est requis");

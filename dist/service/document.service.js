@@ -56,6 +56,22 @@ class DocumentService extends base_service_1.BaseService {
             return this.handleError(error, "Erreur lors de la création du document");
         }
     }
+    /**
+     * Récupère les documents par intervention avec pagination
+     */
+    async findManyByInterventionId(idIntervention, options = {}) {
+        try {
+            const data = await this.documentRepository.findMany({ idIntervention }, options);
+            return {
+                success: true,
+                data,
+                message: "Documents récupérés avec succès",
+            };
+        }
+        catch (error) {
+            return this.handleError(error, "Erreur lors de la récupération des documents par intervention");
+        }
+    }
     async validateCreate(data) {
         if (!data.filename || data.filename.trim().length === 0) {
             throw new Error("Le nom de fichier est requis");

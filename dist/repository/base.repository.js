@@ -135,6 +135,25 @@ class BaseRepository {
         return entity !== null;
     }
     /**
+     * Crée ou met à jour une entité selon si l'ID existe déjà (upsert)
+     * Si l'ID est fourni et existe, met à jour. Sinon, crée une nouvelle entité.
+     */
+    async upsert(id, createData, updateData) {
+        if (id) {
+            // Si un ID est fourni, utiliser upsert Prisma
+            return await this.model.upsert({
+                where: { id },
+                create: { ...createData, id },
+                update: updateData,
+                select: this.getSelectFields(),
+            });
+        }
+        else {
+            // Si aucun ID n'est fourni, créer une nouvelle entité
+            return await this.create(createData);
+        }
+    }
+    /**
      * Méthode pour gérer les erreurs Prisma
      */
     handlePrismaError(error) {

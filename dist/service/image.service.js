@@ -45,7 +45,6 @@ class ImageService extends base_service_1.BaseService {
     async createImage(imageData) {
         try {
             const imageDataToCreate = {
-                ic: imageData.ic,
                 filename: imageData.filename.trim(),
                 data: imageData.data,
                 idIntervention: imageData.idIntervention,
@@ -55,6 +54,22 @@ class ImageService extends base_service_1.BaseService {
         }
         catch (error) {
             return this.handleError(error, "Erreur lors de la création de l'image");
+        }
+    }
+    /**
+     * Récupère les images par intervention avec pagination
+     */
+    async findManyByInterventionId(idIntervention, options = {}) {
+        try {
+            const data = await this.imageRepository.findMany({ idIntervention }, options);
+            return {
+                success: true,
+                data,
+                message: "Images récupérées avec succès",
+            };
+        }
+        catch (error) {
+            return this.handleError(error, "Erreur lors de la récupération des images par intervention");
         }
     }
     async validateCreate(data) {

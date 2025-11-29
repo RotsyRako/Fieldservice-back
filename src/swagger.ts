@@ -1370,7 +1370,6 @@ const options: swaggerJsdoc.Options = {
           type: "object",
           properties: {
             id: { type: "string", format: "uuid" },
-            ic: { type: "integer" },
             filename: { type: "string" },
             data: { type: "string" },
             idIntervention: { type: "string", format: "uuid" },
