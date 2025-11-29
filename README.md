@@ -1,6 +1,6 @@
-# 🚀 Field Service Backend API
+# 🚀 Rotsy Backend API
 
-API Backend moderne construite avec **Node.js**, **Express**, **TypeScript**, **Prisma** et **Supabase**, suivant les principes de **Clean Architecture**.
+API Backend moderne construite avec **Node.js**, **Express**, **TypeScript**, **Prisma** et **PostgreSQL**, suivant les principes de **Clean Architecture**.
 
 ## 🚀 Prise en Main du Projet
 
@@ -9,13 +9,13 @@ API Backend moderne construite avec **Node.js**, **Express**, **TypeScript**, **
 1. **Cloner et installer**
 ```bash
 git clone <repository-url>
-cd field-service-backend
+cd rotsy/backend
 npm install
 ```
 
 2. **Configuration de l'environnement**
 ```bash
-cp .env.example .env
+cp env.example .env
 ```
 
 Éditez le fichier `.env` avec les variables suivantes :
@@ -24,16 +24,16 @@ cp .env.example .env
 PORT=3000
 NODE_ENV=development
 
-# Base de données Supabase
+# Base de données PostgreSQL
 DATABASE_URL="postgresql://username:password@host:port/database"
 
 # Configuration JWT
 JWT_SECRET="your-super-secret-jwt-key-here"
 JWT_EXPIRES_IN="604800"
 
-# Configuration Supabase (optionnel)
-SUPABASE_URL="https://your-project.supabase.co"
-SUPABASE_ANON_KEY="your-supabase-anon-key"
+# Configuration Gemini API (pour les fonctionnalités IA)
+GEMINI_KEY="your-gemini-api-key"
+GEMINI_MODEL="gemini-2.0-flash"
 ```
 
 3. **Configuration de la base de données**
@@ -57,382 +57,212 @@ Une fois le serveur démarré, accédez à la documentation Swagger interactive 
 - **Interface Swagger UI** : http://localhost:3000/api-docs
 - **JSON de spécification** : http://localhost:3000/api-docs.json
 
-La documentation Swagger fournit :
-- ✅ Toutes les routes API disponibles
-- ✅ Définitions des schémas de données
-- ✅ Endpoints testables directement depuis l'interface
-- ✅ Authentification JWT intégrée
-- ✅ Exemples de requêtes et réponses
+## 🏗️ Architecture du Projet
 
-## 📚 Documentation d'Utilisation
+### Structure du Projet
 
-### 🔧 Ajouter une Variable d'Environnement
+Le projet suit une architecture en couches (Clean Architecture) :
 
-1. **Ajouter dans le fichier `.env`**
-```env
-MA_NOUVELLE_VARIABLE="valeur"
+```
+src/
+├── controller/        # Contrôleurs (couche présentation)
+│   ├── base.controller.ts
+│   ├── user.controller.ts
+│   ├── intervention.controller.ts
+│   └── ...
+├── service/           # Services (couche métier)
+│   ├── base.service.ts
+│   ├── user.service.ts
+│   ├── intervention.service.ts
+│   └── remote/        # Services pour APIs externes (Gemini)
+│       ├── recognizeImageGemini.service.ts
+│       └── estimateIntervention.service.ts
+├── repository/        # Repositories (couche données)
+│   ├── base.repository.ts
+│   ├── user.repository.ts
+│   ├── intervention.repository.ts
+│   └── remote/        # Repositories pour APIs externes
+│       ├── recognizeImageGemini.repository.ts
+│       └── estimateIntervention.repository.ts
+├── model/dto/         # DTOs avec validation Zod
+│   ├── user.dto.ts
+│   ├── intervention.dto.ts
+│   └── ...
+├── routes/            # Définition des routes Express
+│   ├── user.route.ts
+│   ├── intervention.route.ts
+│   └── ...
+├── middleware/        # Middlewares Express
+│   ├── auth.ts        # Authentification JWT
+│   ├── validate.ts    # Validation des données
+│   └── error_handler.ts
+├── utils/             # Utilitaires
+│   ├── config.ts      # Configuration centralisée
+│   ├── jwt.utils.ts   # Utilitaires JWT
+│   ├── prisma.ts      # Client Prisma
+│   └── database_connection.ts
+├── app_router.ts      # Configuration des routes
+├── swagger.ts         # Configuration Swagger
+└── index.ts           # Point d'entrée de l'application
 ```
 
-2. **Déclarer dans `src/utils/config.ts`**
-```typescript
-export const config = {
-  // ... autres configurations
-  maNouvelleSection: {
-    maVariable: process.env.MA_NOUVELLE_VARIABLE || "valeur_par_defaut",
-  },
-} as const;
+### Principes de l'Architecture
+
+#### 1. **Séparation des Responsabilités**
+
+- **Controller** : Gère les requêtes HTTP et les réponses
+- **Service** : Contient la logique métier
+- **Repository** : Gère l'accès aux données (base de données ou APIs externes)
+- **DTO** : Définit la structure et la validation des données
+
+#### 2. **Héritage et Réutilisabilité**
+
+- **BaseController** : Fournit les opérations CRUD de base
+- **BaseService** : Fournit les opérations métier communes
+- **BaseRepository** : Fournit les opérations d'accès aux données communes
+
+#### 3. **Validation des Données**
+
+- Utilisation de **Zod** pour la validation des schémas
+- Validation automatique via middleware `validate`
+- Messages d'erreur en français
+
+#### 4. **Gestion des Erreurs**
+
+- Middleware global de gestion d'erreurs
+- Codes de statut HTTP appropriés
+- Messages d'erreur structurés
+
+### Flux de Données
+
+```
+Requête HTTP
+    ↓
+Route (routes/)
+    ↓
+Middleware (auth, validate)
+    ↓
+Controller (controller/)
+    ↓
+Service (service/)
+    ↓
+Repository (repository/)
+    ↓
+Base de données (Prisma) ou API externe
 ```
 
-3. **Utiliser dans le code**
-```typescript
-import { config } from "./utils/config";
+## 🗄️ Utilisation de Prisma
 
-const maValeur = config.maNouvelleSection.maVariable;
-```
+### Configuration Prisma
 
-### 🗄️ Créer un Modèle Prisma (Base de Données)
+Le projet utilise **Prisma** comme ORM pour gérer la base de données PostgreSQL.
 
-#### 1. **Définir le Modèle dans le Schéma** (`prisma/schema.prisma`)
+#### Fichier de Configuration
+
+Le schéma Prisma se trouve dans `prisma/schema.prisma` :
 
 ```prisma
-model MaEntite {
-  id          String   @id @default(cuid())
-  nom         String
-  description String?
-  email       String   @unique
-  age         Int?
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
 
-  // Relations (optionnel)
-  // user       User     @relation(fields: [userId], references: [id])
-  // userId     String
-
-  @@map("ma_entite")
+generator client {
+  provider = "prisma-client-js"
 }
 ```
 
-#### 2. **Types de Champs Prisma Courants**
-
-```prisma
-model Exemple {
-  // Identifiants
-  id        String   @id @default(cuid())     // ID unique
-  uuid      String   @id @default(uuid())     // UUID
-  
-  // Texte
-  nom       String                            // Texte obligatoire
-  email     String   @unique                  // Texte unique
-  description String?                         // Texte optionnel
-  
-  // Numériques
-  age       Int?                              // Entier optionnel
-  prix      Float                             // Décimal
-  quantite  Int      @default(0)              // Entier avec valeur par défaut
-  
-  // Booléens
-  isActive  Boolean  @default(true)           // Booléen avec défaut
-  
-  // Dates
-  createdAt DateTime @default(now())          // Date de création
-  updatedAt DateTime @updatedAt               // Date de mise à jour
-  
-  // Énumérations
-  status    Status   @default(PENDING)        // Énumération
-  
-  // Relations
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  
-  // Index et contraintes
-  @@unique([email, nom])                      // Contrainte unique composite
-  @@index([createdAt])                        // Index sur createdAt
-  @@map("exemple")                            // Nom de table personnalisé
-}
-
-enum Status {
-  PENDING
-  APPROVED
-  REJECTED
-}
-```
-
-#### 3. **Appliquer les Changements à la Base de Données**
+### Commandes Prisma Disponibles
 
 ```bash
-# Option 1: Synchronisation directe (développement)
+# Synchroniser le schéma avec la base de données (développement)
 npm run db:push
-
-# Option 2: Migration avec historique (production)
-npm run db:migrate
 
 # Générer le client Prisma
 npm run db:generate
-```
 
-#### 4. **Vérifier les Changements**
+# Créer une migration (production)
+npm run db:migrate
 
-```bash
-# Ouvrir Prisma Studio pour voir les données
+# Appliquer les migrations (production)
+npm run db:deploy
+
+# Ouvrir Prisma Studio (interface graphique)
 npm run db:studio
+
+# Réinitialiser la base de données
+npm run db:reset
 ```
 
-### 🏗️ Créer une Nouvelle API (Entité Complète)
+### Modèles de Données
 
-#### 1. **Créer le Repository** (`src/repository/maEntite.repository.ts`)
-```typescript
-import { BaseRepository } from "./base.repository";
-import { MaEntite, CreateMaEntiteData, UpdateMaEntiteData } from "@prisma/client";
+Les modèles sont définis dans `prisma/schema.prisma`. Voici les principaux modèles :
 
-export class MaEntiteRepository extends BaseRepository<MaEntite, CreateMaEntiteData, UpdateMaEntiteData> {
-  protected getSelectFields() {
-    return {
-      id: true,
-      nom: true,
-      description: true,
-      email: true,
-      isActive: true,
-      createdAt: true,
-      // Exclure les champs sensibles
-    };
-  }
+- **User** : Utilisateurs de l'application
+- **Intervention** : Interventions techniques
+- **Materiel** : Matériels associés aux interventions
+- **Timesheet** : Feuilles de temps
+- **Image** : Images associées aux interventions
+- **Document** : Documents associés aux interventions
+- **Comment** : Commentaires sur les interventions
+- **Signature** : Signatures électroniques
+
+### Relations Prisma
+
+Les relations entre modèles sont définies dans le schéma :
+
+```prisma
+model User {
+  id            String         @id @default(uuid())
+  interventions Intervention[]
 }
 
-export const maEntiteRepository = new MaEntiteRepository("maEntite");
-```
-
-#### 2. **Créer le Service** (`src/service/maEntite.service.ts`)
-```typescript
-import { BaseService } from "./base.service";
-import { MaEntite, CreateMaEntiteData, UpdateMaEntiteData } from "@prisma/client";
-import { maEntiteRepository } from "../repository/maEntite.repository";
-
-export class MaEntiteService extends BaseService<MaEntite, CreateMaEntiteData, UpdateMaEntiteData> {
-  constructor() {
-    super(maEntiteRepository);
-  }
-
-  protected async validateCreate(data: CreateMaEntiteData): Promise<void> {
-    // Validation métier pour la création
-    if (!data.nom || data.nom.length < 2) {
-      throw new Error("Le nom doit avoir au moins 2 caractères");
-    }
-    
-    // Vérifier l'unicité de l'email
-    const existing = await maEntiteRepository.findByField("email", data.email);
-    if (existing) {
-      throw new Error("Cet email est déjà utilisé");
-    }
-  }
-
-  protected async validateUpdate(data: UpdateMaEntiteData): Promise<void> {
-    // Validation métier pour la mise à jour
-    if (data.nom && data.nom.length < 2) {
-      throw new Error("Le nom doit avoir au moins 2 caractères");
-    }
-    
-    if (data.email) {
-      const existing = await maEntiteRepository.findByField("email", data.email);
-      if (existing && existing.id !== data.id) {
-        throw new Error("Cet email est déjà utilisé");
-      }
-    }
-  }
-
-  protected async validateDelete(id: string): Promise<void> {
-    // Validation métier pour la suppression
-    // Par exemple : vérifier qu'il n'y a pas de dépendances
-    const entity = await maEntiteRepository.findById(id);
-    if (!entity) {
-      throw new Error("Entité non trouvée");
-    }
-  }
-}
-
-export const maEntiteService = new MaEntiteService();
-```
-
-#### 3. **Créer le Controller** (`src/controller/maEntite.controller.ts`)
-```typescript
-import { BaseController } from "./base.controller";
-import { MaEntite, CreateMaEntiteData, UpdateMaEntiteData } from "@prisma/client";
-import { maEntiteService } from "../service/maEntite.service";
-
-export class MaEntiteController extends BaseController<MaEntite, CreateMaEntiteData, UpdateMaEntiteData> {
-  constructor() {
-    super(maEntiteService);
-  }
-
-  // Le controller hérite automatiquement de tous les CRUD :
-  // - create (POST)
-  // - getAll (GET)
-  // - getById (GET /:id)
-  // - update (PUT /:id)
-  // - delete (DELETE /:id)
-  // - count (GET /count)
-  // - findByField (GET /search)
-}
-
-export const maEntiteController = new MaEntiteController();
-```
-
-#### 4. **Créer les DTOs** (`src/model/dto/maEntite.dto.ts`)
-```typescript
-import { z } from "zod";
-
-export const CreateMaEntiteSchema = z.object({
-  nom: z.string().min(2, "Le nom doit avoir au moins 2 caractères"),
-  description: z.string().optional(),
-  email: z.string().email("L'email est invalide"),
-  age: z.number().min(0, "L'âge doit être positif").optional(),
-});
-
-export const UpdateMaEntiteSchema = z.object({
-  nom: z.string().min(2, "Le nom doit avoir au moins 2 caractères").optional(),
-  description: z.string().optional(),
-  email: z.string().email("L'email est invalide").optional(),
-  age: z.number().min(0, "L'âge doit être positif").optional(),
-  isActive: z.boolean().optional(),
-}).refine((data) => Object.keys(data).length > 0, {
-  message: "Au moins un champ doit être fourni pour la mise à jour",
-});
-
-export type CreateMaEntiteDTO = z.infer<typeof CreateMaEntiteSchema>;
-export type UpdateMaEntiteDTO = z.infer<typeof UpdateMaEntiteSchema>;
-```
-
-#### 5. **Créer les Routes** (`src/routes/maEntite.route.ts`)
-```typescript
-import { Router } from "express";
-import { validate } from "../middleware/validate";
-import { CreateMaEntiteSchema, UpdateMaEntiteSchema } from "../model/dto/maEntite.dto";
-import { maEntiteController } from "../controller/maEntite.controller";
-import { authenticateToken, optionalAuth } from "../middleware/auth";
-
-const router = Router();
-
-// Routes publiques
-router.post("/maEntites", validate(CreateMaEntiteSchema), maEntiteController.create);
-
-// Routes protégées (auth optionnelle)
-router.get("/maEntites", optionalAuth, maEntiteController.getAll);
-router.get("/maEntites/count", optionalAuth, maEntiteController.count);
-router.get("/maEntites/search", optionalAuth, maEntiteController.findByField);
-
-// Routes protégées (auth obligatoire)
-router.get("/maEntites/:id", authenticateToken, maEntiteController.getById);
-router.put("/maEntites/:id", authenticateToken, validate(UpdateMaEntiteSchema), maEntiteController.update);
-router.delete("/maEntites/:id", authenticateToken, maEntiteController.delete);
-
-export default router;
-```
-
-#### 6. **Enregistrer les Routes** (`src/app_router.ts`)
-```typescript
-// Ajouter l'import
-import maEntiteRoutes from "./routes/maEntite.route";
-
-// Dans la fonction configureRoutes, ajouter :
-app.use("/api", maEntiteRoutes);
-```
-
-### 🔐 Gestion de l'Authentification
-
-#### **Types de Routes**
-
-```typescript
-// Routes publiques - Aucune authentification
-router.post("/endpoint", controller.method);
-
-// Routes avec auth optionnelle - Utilisateur peut être connecté ou non
-router.get("/endpoint", optionalAuth, controller.method);
-
-// Routes avec auth obligatoire - Utilisateur doit être connecté
-router.get("/endpoint", authenticateToken, controller.method);
-```
-
-#### **Accéder aux Données Utilisateur**
-```typescript
-// Dans un controller
-export class MonController {
-  async maMethode(req: Request, res: Response) {
-    const user = req.user; // Données utilisateur du JWT
-    // user.id, user.email, user.name
-  }
+model Intervention {
+  id          String      @id @default(uuid())
+  userId      String
+  user        User        @relation(fields: [userId], references: [id])
+  materiels   Materiel[]
+  timesheets  Timesheet[]
+  images      Image[]
+  documents   Document[]
+  comments    Comment[]
+  signatures  Signature[]
 }
 ```
 
-### 📝 Validation des Données
+### Utilisation du Client Prisma
 
-#### **Créer un Schéma Zod**
+Le client Prisma est importé et utilisé dans les repositories :
+
 ```typescript
-export const MonSchema = z.object({
-  champ: z.string().min(1, "Le champ est requis"),
-  email: z.string().email("Email invalide"),
-  age: z.number().min(18, "Age minimum 18 ans"),
-  date: z.string().datetime("Date invalide"),
-  enum: z.enum(["VALEUR1", "VALEUR2"], "Valeur invalide"),
+import { prisma } from "../utils/prisma";
+
+// Exemple d'utilisation
+const user = await prisma.user.findUnique({
+  where: { id: userId },
+  include: {
+    interventions: true
+  }
 });
 ```
 
-#### **Utiliser dans les Routes**
-```typescript
-router.post("/endpoint", validate(MonSchema), controller.method);
-```
+### Workflow de Modification du Schéma
 
-### 🎯 Gestion des Erreurs
+1. **Modifier le schéma** dans `prisma/schema.prisma`
+2. **Synchroniser** avec `npm run db:push` (développement)
+   - Ou créer une migration avec `npm run db:migrate` (production)
+3. **Générer le client** avec `npm run db:generate`
+4. **Utiliser le nouveau client** dans le code
 
-#### **Erreurs Métier dans le Service**
-```typescript
-protected async validateCreate(data: CreateData): Promise<void> {
-  if (condition) {
-    throw new Error("Message d'erreur en français");
-  }
-}
-```
+### Bonnes Pratiques Prisma
 
-#### **Codes de Statut HTTP Automatiques**
-- `200` : Succès (GET, PUT)
-- `201` : Créé (POST)
-- `400` : Erreur de validation
-- `401` : Non autorisé
-- `404` : Non trouvé
-- `409` : Conflit (email dupliqué, etc.)
-- `500` : Erreur serveur
+- ✅ Toujours utiliser les types générés par Prisma
+- ✅ Utiliser `include` ou `select` pour optimiser les requêtes
+- ✅ Gérer les transactions pour les opérations complexes
+- ✅ Utiliser les relations Prisma plutôt que les jointures manuelles
+- ✅ Valider les données avec Zod avant de les envoyer à Prisma
 
-### 🔄 Workflow de Développement Complet
-
-1. **Définir l'entité** dans `prisma/schema.prisma`
-2. **Appliquer les changements** : `npm run db:push` + `npm run db:generate`
-3. **Créer le Repository** avec les champs à exposer
-4. **Créer le Service** avec la logique métier
-5. **Créer le Controller** (hérite automatiquement des CRUD)
-6. **Créer les DTOs** pour la validation
-7. **Créer les Routes** avec les middlewares appropriés
-8. **Enregistrer les routes** dans `app_router.ts`
-9. **Tester** avec les endpoints
-
-## ⚙️ Configuration Centralisée
-
-Toutes les variables d'environnement sont gérées de manière centralisée dans `src/utils/config.ts`. Ce fichier :
-
-- ✅ **Valide** les variables critiques au démarrage
-- ✅ **Affiche** la configuration actuelle (sans secrets)
-- ✅ **Fournit** des valeurs par défaut
-- ✅ **Centralise** toute la configuration du projet
-
-### Variables Obligatoires
-- `DATABASE_URL` : URL de connexion à la base de données
-- `JWT_SECRET` : Clé secrète pour signer les tokens JWT
-
-### Variables Optionnelles
-- `PORT` : Port du serveur (défaut: 3000)
-- `NODE_ENV` : Environnement (défaut: development)
-- `JWT_EXPIRES_IN` : Durée des tokens en secondes (défaut: 604800 = 7 jours)
-- `SUPABASE_URL` et `SUPABASE_ANON_KEY` : Configuration Supabase
-
-## 🛠️ Scripts Disponibles
+## 📝 Scripts Disponibles
 
 ### Scripts de Développement
 ```bash
@@ -449,90 +279,7 @@ npm run db:studio    # Interface Prisma Studio
 npm run db:migrate   # Créer une migration (production)
 npm run db:reset     # Réinitialiser la base de données
 npm run db:deploy    # Appliquer les migrations (production)
-npm run db:seed      # Peupler la base de données
 ```
-
-## 📊 Format des Réponses
-
-### ✅ Réponse de Succès
-```json
-{
-  "message": "Opération réussie",
-  "success": true,
-  "data": {
-    // Données retournées
-  }
-}
-```
-
-### ❌ Réponse d'Erreur
-```json
-{
-  "message": "Message d'erreur descriptif",
-  "success": false
-}
-```
-
-## 📋 API Disponibles
-
-### 🏥 Health Check
-
-| Méthode | Endpoint | Description | Exemple de Retour |
-|---------|----------|-------------|-------------------|
-| `GET` | `/health` | Statut de l'API | `{"status":"ok","timestamp":"2025-01-01T00:00:00.000Z","service":"Rotsy Backend API"}` |
-
-### 👤 API Users
-
-#### Routes Publiques
-
-| Méthode | Endpoint | Description | Exemple de Retour |
-|---------|----------|-------------|-------------------|
-| `POST` | `/api/users` | Créer un utilisateur | ```json<br/>{"message":"Utilisateur créé avec succès","success":true,"data":{"user":{"id":"uuid","email":"user@example.com","name":"User Name","createdAt":"2025-01-01T00:00:00.000Z"},"token":"jwt-token"}}<br/>``` |
-| `POST` | `/api/auth/login` | Authentification | ```json<br/>{"message":"Authentification réussie","success":true,"data":{"user":{"id":"uuid","email":"user@example.com","name":"User Name","createdAt":"2025-01-01T00:00:00.000Z"},"token":"jwt-token"}}<br/>``` |
-
-#### Routes Protégées (Auth Optionnelle)
-
-| Méthode | Endpoint | Description | Exemple de Retour |
-|---------|----------|-------------|-------------------|
-| `GET` | `/api/users` | Liste des utilisateurs | ```json<br/>{"message":"Entités récupérées avec succès","success":true,"data":{"data":[{"id":"uuid","email":"user@example.com","name":"User Name","createdAt":"2025-01-01T00:00:00.000Z"}],"pagination":{"page":1,"limit":10,"total":1,"totalPages":1}}}<br/>``` |
-| `GET` | `/api/users/count` | Compter les utilisateurs | ```json<br/>{"message":"Nombre d'entités récupéré","success":true,"data":4}<br/>``` |
-| `GET` | `/api/users/search?field=email&value=user@example.com` | Recherche par champ | ```json<br/>{"message":"Entité trouvée","success":true,"data":{"id":"uuid","email":"user@example.com","name":"User Name","createdAt":"2025-01-01T00:00:00.000Z"}}<br/>``` |
-
-#### Routes Protégées (Auth Obligatoire)
-
-| Méthode | Endpoint | Description | Exemple de Retour |
-|---------|----------|-------------|-------------------|
-| `GET` | `/api/users/:id` | Détails utilisateur | ```json<br/>{"message":"Entité trouvée","success":true,"data":{"id":"uuid","email":"user@example.com","name":"User Name","createdAt":"2025-01-01T00:00:00.000Z"}}<br/>``` |
-| `GET` | `/api/users/email/:email` | Utilisateur par email | ```json<br/>{"message":"Utilisateur trouvé","success":true,"data":{"id":"uuid","email":"user@example.com","name":"User Name","createdAt":"2025-01-01T00:00:00.000Z"}}<br/>``` |
-| `PUT` | `/api/users/:id` | Mettre à jour utilisateur | ```json<br/>{"message":"Entité mise à jour avec succès","success":true,"data":{"id":"uuid","email":"user@example.com","name":"User Name Updated","createdAt":"2025-01-01T00:00:00.000Z"}}<br/>``` |
-| `DELETE` | `/api/users/:id` | Supprimer utilisateur | ```json<br/>{"message":"Entité supprimée avec succès","success":true}<br/>``` |
-
-## 🔐 Authentification
-
-L'API utilise des **tokens JWT**. Incluez le token dans l'en-tête `Authorization: Bearer <token>` pour les routes protégées.
-
-### Format du Token JWT
-```json
-{
-  "id": "user-uuid",
-  "email": "user@example.com", 
-  "name": "User Name",
-  "iat": 1234567890,
-  "exp": 1234567890
-}
-```
-
-## 📝 Codes de Statut HTTP
-
-| Code | Signification | Exemple |
-|------|---------------|---------|
-| 200 | Succès | Récupération, mise à jour |
-| 201 | Créé | Création d'utilisateur |
-| 400 | Mauvaise requête | Validation échouée |
-| 401 | Non autorisé | Token manquant/invalide |
-| 404 | Non trouvé | Ressource inexistante |
-| 409 | Conflit | Email déjà utilisé |
-| 500 | Erreur serveur | Erreur interne |
 
 ---
 

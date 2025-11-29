@@ -7,7 +7,8 @@ import imageRoutes from "./routes/image.route";
 import documentRoutes from "./routes/document.route";
 import commentRoutes from "./routes/comment.route";
 import signatureRoutes from "./routes/signature.route";
-import recognizeImageRoutes from "./routes/recognizeImage.route";
+import recognizeImageGeminiRoutes from "./routes/recognizeImageGemini.route";
+import estimateInterventionRoutes from "./routes/estimateIntervention.route";
 
 /**
  * Configure toutes les routes de l'application
@@ -32,5 +33,6 @@ export function configureRoutes(app: Express): void {
   app.use("/api", documentRoutes);
   app.use("/api", commentRoutes);
   app.use("/api", signatureRoutes);
-  app.use("/api", recognizeImageRoutes);
+  app.use("/api", recognizeImageGeminiRoutes);
+  app.use("/api", estimateInterventionRoutes);
 }

@@ -31,21 +31,10 @@ export const config = {
     anonKey: process.env.SUPABASE_ANON_KEY || "",
   },
 
-  // Configuration Google Cloud Vision API
-  googleCloud: {
-    type: process.env.GOOGLE_CLOUD_TYPE || "service_account",
-    projectId: process.env.GOOGLE_CLOUD_PROJECT_ID || "",
-    privateKeyId: process.env.GOOGLE_CLOUD_PRIVATE_KEY_ID || "",
-    privateKey: process.env.GOOGLE_CLOUD_PRIVATE_KEY || "",
-    clientEmail: process.env.GOOGLE_CLOUD_CLIENT_EMAIL || "",
-    clientId: process.env.GOOGLE_CLOUD_CLIENT_ID || "",
-    authUri: process.env.GOOGLE_CLOUD_AUTH_URI || "https://accounts.google.com/o/oauth2/auth",
-    tokenUri: process.env.GOOGLE_CLOUD_TOKEN_URI || "https://oauth2.googleapis.com/token",
-    authProviderX509CertUrl:
-      process.env.GOOGLE_CLOUD_AUTH_PROVIDER_X509_CERT_URL ||
-      "https://www.googleapis.com/oauth2/v1/certs",
-    clientX509CertUrl: process.env.GOOGLE_CLOUD_CLIENT_X509_CERT_URL || "",
-    universeDomain: process.env.GOOGLE_CLOUD_UNIVERSE_DOMAIN || "googleapis.com",
+  // Configuration Gemini API
+  gemini: {
+    apiKey: process.env.GEMINI_KEY || "",
+    model: process.env.GEMINI_MODEL || "gemini-2.0-flash", // Modèle par défaut, options: gemini-2.0-flash, gemini-2.5-flash, gemini-2.5-pro
   },
 } as const;
 

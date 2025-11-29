@@ -1,44 +1,44 @@
 import { z } from "zod";
 
-// Schémas pour les entités dans la synchronisation (id optionnel pour upsert)
+// Schémas pour les entités dans la synchronisation (id optionnel pour upsert, peut être null)
 const MaterielSyncSchema = z.object({
-  id: z.string().uuid().optional(),
+  id: z.string().uuid().nullish(),
   name: z.string().min(1, "Le nom du matériel est requis"),
   quantity: z.number().int().min(1, "La quantité doit être un entier positif"),
-});
+}).passthrough(); // Permet les champs supplémentaires comme localId, createdAt, etc.
 
 const TimesheetSyncSchema = z.object({
-  id: z.string().uuid().optional(),
+  id: z.string().uuid().nullish(),
   description: z.string().min(1, "La description est requise"),
   timeAllocated: z.number().positive("Le temps alloué doit être un nombre positif"),
   date: z.string().min(1, "La date est requise"),
-});
+}).passthrough(); // Permet les champs supplémentaires comme localId, idIntervention, createdAt, etc.
 
 const ImageSyncSchema = z.object({
-  id: z.string().uuid().optional(),
+  id: z.string().uuid().nullish(),
   filename: z.string().min(1, "Le nom de fichier est requis"),
   data: z.string().min(1, "Les données sont requises"),
-});
+}).passthrough(); // Permet les champs supplémentaires comme localId, createdAt, etc.
 
 const DocumentSyncSchema = z.object({
-  id: z.string().uuid().optional(),
+  id: z.string().uuid().nullish(),
   filename: z.string().min(1, "Le nom de fichier est requis"),
   data: z.string().min(1, "Les données sont requises"),
-});
+}).passthrough(); // Permet les champs supplémentaires comme localId, createdAt, etc.
 
 const CommentSyncSchema = z.object({
-  id: z.string().uuid().optional(),
+  id: z.string().uuid().nullish(),
   message: z.string().min(1, "Le message est requis"),
   date: z.string().min(1, "La date est requise"),
   attachmentFilename: z.string().optional().nullable(),
   attachmentData: z.string().optional().nullable(),
-});
+}).passthrough(); // Permet les champs supplémentaires comme localId, createdAt, etc.
 
 const SignatureSyncSchema = z.object({
-  id: z.string().uuid().optional(),
+  id: z.string().uuid().nullish(),
   filename: z.string().min(1, "Le nom de fichier est requis"),
   data: z.string().min(1, "Les données sont requises"),
-});
+}).passthrough(); // Permet les champs supplémentaires comme localId, idIntervention, createdAt, etc.
 
 // Schéma pour un élément de synchronisation d'intervention
 const InterventionSyncItemSchema = z.object({

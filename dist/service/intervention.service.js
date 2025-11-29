@@ -201,7 +201,7 @@ class InterventionService extends base_service_1.BaseService {
                             quantity: materiel.quantity,
                         };
                         // Utiliser upsert pour créer ou mettre à jour selon si l'ID existe
-                        await this.materielRepository.upsert(materiel.id, createData, updateData);
+                        await this.materielRepository.upsert(materiel.id ?? undefined, createData, updateData);
                     }
                 }
                 // Synchroniser les timesheets
@@ -219,7 +219,7 @@ class InterventionService extends base_service_1.BaseService {
                             date: timesheet.date,
                         };
                         // Utiliser upsert pour créer ou mettre à jour selon si l'ID existe
-                        await this.timesheetRepository.upsert(timesheet.id, createData, updateData);
+                        await this.timesheetRepository.upsert(timesheet.id ?? undefined, createData, updateData);
                     }
                 }
                 // Synchroniser les images
@@ -235,7 +235,7 @@ class InterventionService extends base_service_1.BaseService {
                             data: image.data,
                         };
                         // Utiliser upsert pour créer ou mettre à jour selon si l'ID existe
-                        await this.imageRepository.upsert(image.id, createData, updateData);
+                        await this.imageRepository.upsert(image.id ?? undefined, createData, updateData);
                     }
                 }
                 // Synchroniser les documents
@@ -251,7 +251,7 @@ class InterventionService extends base_service_1.BaseService {
                             data: document.data,
                         };
                         // Utiliser upsert pour créer ou mettre à jour selon si l'ID existe
-                        await this.documentRepository.upsert(document.id, createData, updateData);
+                        await this.documentRepository.upsert(document.id ?? undefined, createData, updateData);
                     }
                 }
                 // Synchroniser les commentaires
@@ -271,7 +271,7 @@ class InterventionService extends base_service_1.BaseService {
                             attachmentData: comment.attachmentData || null,
                         };
                         // Utiliser upsert pour créer ou mettre à jour selon si l'ID existe
-                        await this.commentRepository.upsert(comment.id, createData, updateData);
+                        await this.commentRepository.upsert(comment.id ?? undefined, createData, updateData);
                     }
                 }
                 // Synchroniser la signature (une seule par intervention)
@@ -296,7 +296,7 @@ class InterventionService extends base_service_1.BaseService {
                         await this.signatureRepository.delete(sig.id);
                     }
                     // Utiliser upsert pour créer ou mettre à jour selon si l'ID existe
-                    await this.signatureRepository.upsert(item.signature.id, createData, updateData);
+                    await this.signatureRepository.upsert(item.signature.id ?? undefined, createData, updateData);
                 }
                 // Récupérer l'intervention complète avec toutes ses relations
                 const completeIntervention = await prisma_1.prisma.intervention.findUnique({
